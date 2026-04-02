@@ -12,14 +12,19 @@
   <main class="container-fluid px-4 py-4">
     <div class="mb-4">
       <h1 class="gfn-title">GeForce NOW Games</h1>
-      <p class="gfn-subtitle">Complete list of games available on GeForce NOW. <span id="gameCount" class="badge badge-gfn"></span></p>
+      <p class="gfn-subtitle">
+        <span id="gameCount" class="badge badge-gfn"></span>
+        <span id="updateDate" class="text-muted ml-2" style="font-size: 0.85rem;"></span>
+      </p>
     </div>
 
-    <table id="gameslist" class="table table-bordered display responsive" style="width:100%">
+    <table id="gameslist" class="table table-bordered display responsive nowrap" style="width:100%">
       <thead>
         <tr>
-          <th style="width:70%">Title</th>
-          <th style="width:30%">Store / Launcher</th>
+          <th data-priority="1">Title</th>
+          <th data-priority="3">Genre</th>
+          <th data-priority="2">Store</th>
+          <th data-priority="4">Score</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -27,6 +32,22 @@
   </main>
 
   <script type="text/javascript">
+    function scoreColor(score) {
+      if (score >= 8) return '#76b900';
+      if (score >= 6) return '#a8c023';
+      if (score >= 4) return '#c0a020';
+      if (score >= 1) return '#c05040';
+      return '#666';
+    }
+
+    function scoreBadge(score, text, reviews) {
+      if (!score || !text) return '<span class="score-badge" style="background:#333;color:#666;">—</span>';
+      var color = scoreColor(score);
+      var revStr = reviews >= 1000 ? Math.round(reviews/1000) + 'k' : reviews;
+      return '<span class="score-badge" style="background:' + color + '20;color:' + color + ';border:1px solid ' + color + '40;" title="' + revStr + ' reviews">'
+        + text + '</span>';
+    }
+
     $(document).ready(function() {
       var table = $('#gameslist').DataTable({
         "ajax": {
@@ -38,8 +59,44 @@
         "pageLength": 50,
         "order": [[0, "asc"]],
         "columns": [
-          { "data": "title" },
-          { "data": "store" }
+          {
+            "data": "title",
+            "render": function(data, type, row) {
+              if (type === 'display' && row.storeUrl) {
+                return '<a href="' + row.storeUrl + '" target="_blank" rel="noopener">' + data + '</a>'
+                  + (row.optimized ? ' <i class="fas fa-bolt gfn-optimized" title="GFN Optimized"></i>' : '');
+              }
+              return data;
+            }
+          },
+          {
+            "data": "genres",
+            "render": function(data, type) {
+              if (type === 'display' && data) {
+                return '<span class="genre-text">' + data + '</span>';
+              }
+              return data || '';
+            }
+          },
+          {
+            "data": "store",
+            "render": function(data, type) {
+              if (type === 'display') {
+                var icon = 'fa-gamepad';
+                if (data === 'Steam') icon = 'fa-steam';
+                else if (data === 'Epic') icon = 'fa-box';
+                return '<i class="fab ' + icon + '"></i> ' + data;
+              }
+              return data;
+            }
+          },
+          {
+            "data": "score",
+            "render": function(data, type, row) {
+              if (type === 'display') return scoreBadge(data, row.scoreText, row.totalReviews);
+              return data || 0;
+            }
+          }
         ],
         "language": {
           "search": '<i class="fas fa-search"></i>',
@@ -48,9 +105,12 @@
           "info": "Showing _START_ to _END_ of _TOTAL_ games",
           "infoFiltered": "(filtered from _MAX_ total games)"
         },
-        "initComplete": function() {
+        "initComplete": function(settings, json) {
           var total = this.api().data().length;
           $('#gameCount').text(total.toLocaleString() + ' games');
+          if (json.updated) {
+            $('#updateDate').text('Updated: ' + json.updated);
+          }
         }
       });
     });
