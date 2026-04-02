@@ -22,9 +22,10 @@
       <thead>
         <tr>
           <th data-priority="1">Title</th>
-          <th data-priority="3">Genre</th>
-          <th data-priority="2">Store</th>
-          <th data-priority="4">Score</th>
+          <th data-priority="4">Genre</th>
+          <th data-priority="3">Store</th>
+          <th data-priority="2">Rating</th>
+          <th data-priority="5">Score</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -32,6 +33,27 @@
   </main>
 
   <script type="text/javascript">
+    function ratingColor(pct) {
+      if (pct >= 80) return '#76b900';
+      if (pct >= 65) return '#a8c023';
+      if (pct >= 50) return '#c0a020';
+      if (pct >= 30) return '#c07020';
+      if (pct > 0) return '#c05040';
+      return '#444';
+    }
+
+    function ratingBar(rating, reviews) {
+      if (!rating) return '<span class="rating-na">—</span>';
+      var color = ratingColor(rating);
+      var revStr = reviews >= 1000 ? Math.round(reviews/1000) + 'k' : reviews;
+      return '<div class="rating-cell" title="' + revStr + ' reviews">'
+        + '<div class="rating-bar-bg">'
+        + '<div class="rating-bar-fill" style="width:' + rating + '%;background:' + color + ';"></div>'
+        + '</div>'
+        + '<span class="rating-pct" style="color:' + color + ';">' + rating + '%</span>'
+        + '</div>';
+    }
+
     function scoreColor(score) {
       if (score >= 8) return '#76b900';
       if (score >= 6) return '#a8c023';
@@ -43,8 +65,7 @@
     function scoreBadge(score, text, reviews) {
       if (!score || !text) return '<span class="score-badge" style="background:#333;color:#666;">—</span>';
       var color = scoreColor(score);
-      var revStr = reviews >= 1000 ? Math.round(reviews/1000) + 'k' : reviews;
-      return '<span class="score-badge" style="background:' + color + '20;color:' + color + ';border:1px solid ' + color + '40;" title="' + revStr + ' reviews">'
+      return '<span class="score-badge" style="background:' + color + '20;color:' + color + ';border:1px solid ' + color + '40;">'
         + text + '</span>';
     }
 
@@ -88,6 +109,13 @@
                 return '<i class="fab ' + icon + '"></i> ' + data;
               }
               return data;
+            }
+          },
+          {
+            "data": "rating",
+            "render": function(data, type, row) {
+              if (type === 'display') return ratingBar(data, row.totalReviews);
+              return data || 0;
             }
           },
           {

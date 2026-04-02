@@ -2,6 +2,7 @@
 """Fetch GeForce NOW game list from NVIDIA CDN and enrich with Steam review scores."""
 
 import json
+import math
 import os
 import re
 import sys
@@ -39,15 +40,30 @@ def extract_steam_id(steam_url):
     return int(m.group(1)) if m else None
 
 
+def steamdb_rating(positive, negative):
+    """Wilson score lower bound (95% CI) — same formula SteamDB uses."""
+    total = positive + negative
+    if total == 0:
+        return 0
+    avg = positive / total
+    score = avg - 1.96 * math.sqrt(avg * (1 - avg) / total)
+    return round(max(score * 100, 0), 1)
+
+
 def fetch_steam_score(steam_id):
     for attempt in range(RETRY + 1):
         try:
             data = fetch_json(STEAM_REVIEW_URL.format(steam_id))
             qs = data.get("query_summary", {})
+            pos = qs.get("total_positive", 0)
+            neg = qs.get("total_negative", 0)
             return {
                 "score": qs.get("review_score", 0),
                 "scoreText": qs.get("review_score_desc", ""),
                 "totalReviews": qs.get("total_reviews", 0),
+                "positive": pos,
+                "negative": neg,
+                "rating": steamdb_rating(pos, neg),
             }
         except Exception:
             if attempt < RETRY:
@@ -96,6 +112,7 @@ def main():
             "score": 0,
             "scoreText": "",
             "totalReviews": 0,
+            "rating": 0,
         }
 
         if steam_id:
@@ -104,6 +121,12 @@ def main():
                 entry["score"] = cached["score"]
                 entry["scoreText"] = cached["scoreText"]
                 entry["totalReviews"] = cached["totalReviews"]
+                # Recalculate rating for old cache entries missing it
+                if "rating" in cached:
+                    entry["rating"] = cached["rating"]
+                elif "positive" in cached:
+                    entry["rating"] = steamdb_rating(cached["positive"], cached["negative"])
+                    cached["rating"] = entry["rating"]
             else:
                 steam_ids_to_fetch[steam_id] = entry
 
@@ -125,6 +148,7 @@ def main():
                     entry["score"] = result["score"]
                     entry["scoreText"] = result["scoreText"]
                     entry["totalReviews"] = result["totalReviews"]
+                    entry["rating"] = result["rating"]
                     cache[str(sid)] = result
                 if done % 100 == 0 or done == len(to_fetch):
                     print(f"    {done}/{len(to_fetch)}")

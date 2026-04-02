@@ -169,6 +169,41 @@ a:hover {
   font-size: 0.85rem;
 }
 
+/* ===== Rating bar (SteamDB style) ===== */
+.rating-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 120px;
+}
+
+.rating-bar-bg {
+  flex: 1;
+  height: 8px;
+  background: #2a2a3e;
+  border-radius: 4px;
+  overflow: hidden;
+  min-width: 60px;
+}
+
+.rating-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+.rating-pct {
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+  min-width: 38px;
+  text-align: right;
+}
+
+.rating-na {
+  color: #444;
+}
+
 /* ===== Score badge ===== */
 .score-badge {
   display: inline-block;
