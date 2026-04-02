@@ -1,0 +1,9 @@
+services:
+  gfnlist:
+    build: .
+    container_name: gfnlist
+    restart: unless-stopped
+    ports:
+      - "3100:3000"
+    environment:
+      - NODE_ENV=production
