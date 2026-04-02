@@ -1,103 +1,213 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
+/* ===== Base ===== */
 body {
-font-family: 'Roboto', sans-serif;
+  background-color: #1a1a2e;
+  color: #e0e0e0;
+  font-family: 'Roboto', sans-serif;
 }
 
-img {
-width: 250px;
-}
-
-.navigation {
-display:flex;
-align-items:center;
-justify-content:space-between;
-flex-wrap:wrap;
-background-color: #76b900;
-color: white;
-width:100%;
-text-transform: uppercase;
-}
-
-.mylogo {
-margin-left: 20px;
-}
-
-.mylogo a {
-text-decoration: none;
-color: white;
-}
-
-.mymenu a {
-text-decoration: none;
-color: white;
-}
-
-.mymenu a:hover {
-text-decoration: none;
-color: white;
-}
-
-.mymenu {
-display:flex;
-align-items:center;
-justify-content:space-between;
-flex-wrap:wrap;
-gap:24px;
-list-style:none;
-cursor:pointer;
-margin-top: 15px;
-}
-
-.mymenu li:hover .mysubmenu > li {
-display: block;
-background-color: #76b900;
-}
- 
-.mysubmenu {
-display: flex;
-flex-direction: column;
-position: absolute;
-}
-
-.mysubmenu li {
-display: none;
-}
-
+/* ===== Navbar ===== */
 .navbar {
-    text-transform: uppercase;
-    background-color: #76b900;
+  background-color: #16213e !important;
+  border-bottom: 2px solid #76b900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-thead {
-text-transform: uppercase;
-color: #76b900 !important;
-font-family: geforce-bold;
+.navbar-brand {
+  color: #e0e0e0 !important;
+  font-weight: 700;
+  font-size: 1.2rem;
 }
 
-.custom-control {
-margin-left: 20px;
+.navbar-brand:hover {
+  color: #76b900 !important;
 }
 
-#darkSwitch {
-cursor: pointer;
+.nav-link {
+  color: #b0b0b0 !important;
+  transition: color 0.2s;
 }
 
-@media only screen and (max-width: 600px) {
-.custom-control {
-    margin-left: 30px;
-}
-.mylogo {
-margin-left: 30px;
-margin-top: 10px;
-}
+.nav-link:hover {
+  color: #76b900 !important;
 }
 
-[data-theme="dark"] {
-background-color: #262626 !important;
-color: #eee;
+/* ===== Typography ===== */
+.gfn-title {
+  color: #e0e0e0;
+  font-weight: 700;
+  font-size: 1.8rem;
+  border-left: 4px solid #76b900;
+  padding-left: 0.75rem;
 }
 
-[data-theme="dark"] table {
-color: #eee;
+.gfn-subtitle {
+  color: #9e9e9e;
+  margin-top: 0.5rem;
+}
+
+.gfn-accent {
+  color: #76b900;
+}
+
+/* ===== Badge ===== */
+.badge-gfn {
+  background-color: #76b900;
+  color: #1a1a2e;
+  font-size: 0.85rem;
+  padding: 0.35em 0.65em;
+  border-radius: 4px;
+}
+
+/* ===== DataTables ===== */
+table.dataTable {
+  border-collapse: collapse !important;
+}
+
+table.dataTable tbody tr {
+  background-color: #1a1a2e !important;
+  color: #e0e0e0;
+  border-bottom: 1px solid #0f3460;
+}
+
+table.dataTable tbody tr:hover {
+  background-color: #0f3460 !important;
+}
+
+table.dataTable thead th {
+  background-color: #16213e !important;
+  color: #76b900 !important;
+  border-bottom: 2px solid #76b900 !important;
+  border-top: none !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+table.dataTable thead th,
+table.dataTable tbody td {
+  border-color: #0f3460 !important;
+}
+
+.dataTables_wrapper {
+  color: #e0e0e0;
+}
+
+.dataTables_wrapper .dataTables_length label,
+.dataTables_wrapper .dataTables_filter label,
+.dataTables_wrapper .dataTables_info {
+  color: #9e9e9e;
+}
+
+.dataTables_wrapper .dataTables_length select {
+  background-color: #16213e;
+  color: #e0e0e0;
+  border: 1px solid #76b900;
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+  background-color: #16213e;
+  color: #e0e0e0;
+  border: 1px solid #76b900;
+  border-radius: 4px;
+  padding: 4px 10px;
+  margin-left: 6px;
+}
+
+.dataTables_wrapper .dataTables_filter input:focus {
+  outline: none;
+  border-color: #8fd400;
+  box-shadow: 0 0 0 2px rgba(118,185,0,0.2);
+}
+
+/* ===== Pagination ===== */
+.page-link {
+  background-color: #16213e;
+  color: #76b900;
+  border-color: #0f3460;
+}
+
+.page-link:hover {
+  background-color: #0f3460;
+  color: #8fd400;
+  border-color: #76b900;
+}
+
+.page-item.active .page-link {
+  background-color: #76b900;
+  border-color: #76b900;
+  color: #1a1a2e;
+}
+
+.page-item.disabled .page-link {
+  background-color: #16213e;
+  color: #555;
+  border-color: #0f3460;
+}
+
+/* ===== Links ===== */
+a {
+  color: #76b900;
+}
+
+a:hover {
+  color: #8fd400;
+  text-decoration: none;
+}
+
+/* ===== Discount badge ===== */
+.discount-badge {
+  background-color: #76b900;
+  color: #1a1a2e;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+/* ===== Info page ===== */
+.info-card {
+  background-color: #16213e;
+  border-radius: 8px;
+  padding: 2.5rem;
+  border: 1px solid #0f3460;
+}
+
+.gfn-divider {
+  border-color: #0f3460;
+  margin: 2rem 0;
+}
+
+.info-links {
+  list-style: none;
+  padding: 0;
+}
+
+.info-links li {
+  padding: 0.5rem 0;
+  color: #b0b0b0;
+  border-bottom: 1px solid #0f3460;
+}
+
+.info-links li:last-child {
+  border-bottom: none;
+}
+
+/* ===== Responsive DataTable child rows ===== */
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control::before,
+table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control::before {
+  background-color: #76b900 !important;
+  border-color: #1a1a2e !important;
+}
+
+.dtr-details {
+  background-color: #0f3460 !important;
+}
+
+.dtr-details li {
+  border-bottom-color: #1a1a2e !important;
 }

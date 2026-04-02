@@ -4,11 +4,8 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
-    "axios": "^1.14.0",
-    "dotenv": "^16.0.0",
     "ejs": "^3.0.1",
-    "express": "^4.17.3",
-    "https": "^1.0.0"
+    "express": "^4.17.3"
   },
   "scripts": {
     "start": "node app.js",

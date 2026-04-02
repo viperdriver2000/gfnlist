@@ -2,29 +2,37 @@
 <html lang="en">
 
 <head>
-
   <%- include("partials/head.ejs") %>
-
 </head>
 
 <body>
 
-  <%- include("partials/header.ejs") %> 
+  <%- include("partials/header.ejs") %>
 
-  <style>
-    .info {
-      margin : 0;
-      padding : 0;
-    }
-  </style>
+  <main class="container py-5">
+    <div class="info-card">
+      <h1 class="gfn-title mb-4">About GFN Games</h1>
 
-  <div class="container p-5">
-  <h4>Disclaimer</h4>
-  <p>Please check that you're buying the right key on any of the stores because it's made automatically and this site if for information with affiliate links nothing much</p>
-  <!-- <p>Offers on Steam are a limited list because of the number of requests wa can do on steam in a day</p> -->
-  </div>
+      <p>GFN Games is a clean, fast browser for the full GeForce NOW game catalog. Find out which games you can stream directly via NVIDIA's cloud gaming service.</p>
 
-  <script src="vendor/dark-mode-switch.min.js"></script>
+      <p>Game data is sourced from the official NVIDIA CDN and updated regularly.</p>
+
+      <hr class="gfn-divider">
+
+      <h5 class="gfn-accent mb-3">Pages</h5>
+      <ul class="info-links">
+        <li><a href="/"><i class="fas fa-list mr-2"></i>Games</a> — Full list of all GeForce NOW supported games</li>
+        <li><a href="/offers"><i class="fas fa-tag mr-2"></i>Steam Deals</a> — Current Steam discounts for GFN titles</li>
+      </ul>
+
+      <hr class="gfn-divider">
+
+      <p class="text-muted small">
+        Based on <a href="https://github.com/nazimboudeffa/gfnlist" target="_blank" rel="noopener">nazimboudeffa/gfnlist</a>.
+        GeForce NOW is a trademark of NVIDIA Corporation.
+      </p>
+    </div>
+  </main>
 
   <%- include("partials/analytics.ejs") %>
 

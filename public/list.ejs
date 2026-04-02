@@ -2,101 +2,59 @@
 <html lang="en">
 
 <head>
-
   <%- include("partials/head.ejs") %>
-
 </head>
 
 <body>
 
-  <%- include("partials/header.ejs") %>  
+  <%- include("partials/header.ejs") %>
 
-  <!--
-    <div class="card-body p-5 center">
-      <a href="https://play.google.com/store/apps/details?id=app.bravostudio.A01FEYSYBSHTXHGMW87WB89YAGM"><img src="images/Google-Play-Icon.png"/></a>
+  <main class="container-fluid px-4 py-4">
+    <div class="mb-4">
+      <h1 class="gfn-title">GeForce NOW Games</h1>
+      <p class="gfn-subtitle">Complete list of games available on GeForce NOW. <span id="gameCount" class="badge badge-gfn"></span></p>
     </div>
-    <div class="center">
-      <p>GFNSocial Android App is currently in dev, have fun with the v0.0.1-alpha.0 ! <a href="https://nazimboudeffa.medium.com/i-love-nocode-e6a0df60df30">Read more ...</a></p>
-    </div>
-  -->
 
-  <main class="card-body p-5">
-    <h4>GeForce NOW Games List</h4>
-    <p>This list contains the latest live GeForce NOW Games.</p>
-    <table id="gameslist" class="table table-striped table-bordered display responsive" style="width:100%">
+    <table id="gameslist" class="table table-bordered display responsive" style="width:100%">
       <thead>
         <tr>
-          <th data-priority="1" style="width:60%">Title</th>
-          <th data-priority="2" style="width:30%">Launcher</th>
+          <th style="width:70%">Title</th>
+          <th style="width:30%">Store / Launcher</th>
         </tr>
       </thead>
-      <!--
-      <thead class="filters">
-        <tr>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
-      -->
       <tbody></tbody>
     </table>
   </main>
 
   <script type="text/javascript">
     $(document).ready(function() {
-      /*
-      $('#gameslist .filters th').each( function () {
-        var title = $('#gameslist thead th').eq( $(this).index() ).text();
-        $(this).html('<input type="text" placeholder="Search ' + title + '"/>');
-      });
-      */
-      $('#gameslist').DataTable({
-        "ajax": "data/data.json",
-        "responsive":true,
+      var table = $('#gameslist').DataTable({
+        "ajax": {
+          "url": "data/data.json",
+          "dataSrc": "data"
+        },
+        "responsive": true,
         "searching": true,
-        "pageLength": 10,
-        /*
-        "ordering": true,
-        "info": true,
-        "blengthchange": true,
-        "lengthChange": false,
-        "paging": true,
-        "pagingType": "full_numbers",
-        "dom": 'lrtip',
-        */
-        columnDefs: [
-          { responsivePriority: 1, targets: 0 },
-          { responsivePriority: 2, targets: 1 }
+        "pageLength": 50,
+        "order": [[0, "asc"]],
+        "columns": [
+          { "data": "title" },
+          { "data": "store" }
         ],
-        "columns": [{
-          "data": "title"
-        }, {
-          "data": "store"
-        }]
+        "language": {
+          "search": '<i class="fas fa-search"></i>',
+          "searchPlaceholder": "Search games...",
+          "lengthMenu": "Show _MENU_ games",
+          "info": "Showing _START_ to _END_ of _TOTAL_ games",
+          "infoFiltered": "(filtered from _MAX_ total games)"
+        },
+        "initComplete": function() {
+          var total = this.api().data().length;
+          $('#gameCount').text(total.toLocaleString() + ' games');
+        }
       });
-      /*
-			table.columns().eq(0).each(function (colIdx) {
-				$('input', $('.filters th')[colIdx] ).on('keyup change', function () {
-					table
-						.column(colIdx)
-						.search(this.value)
-						.draw();
-				});
-			});
-      var table = $('#gameslist').DataTable();
-      table.columns().every(function() {
-        var that = this;
-        $('input', this.footer()).on('keyup change clear', function() {
-          if (that.search() !== this.value) {
-            that.search(this.value).draw();
-          }
-        });
-      });
-      */
     });
   </script>
-  
-  <script src="vendor/dark-mode-switch.min.js"></script>
 
   <%- include("partials/analytics.ejs") %>
 

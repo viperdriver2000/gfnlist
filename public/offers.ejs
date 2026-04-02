@@ -2,62 +2,77 @@
 <html lang="en">
 
 <head>
-
   <%- include("partials/head.ejs") %>
-
 </head>
 
 <body>
 
-  <%- include("partials/header.ejs") %>  
+  <%- include("partials/header.ejs") %>
 
-  <div class="card-body p-5">
-    <h4>STEAM OFFERS</h4>
-    <p>LAST UPDATE <%= last %> IN EURO</p>
-    <div class="table-responsive">
-      <table id="gameslist" class="table table-striped table-bordered display responsive" style="width:100%">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <!--<th>Id</th>-->
-            <th>Link</th>
-            <th>Initial</th>
-            <th>Actual</th>
-            <th>Discount</th>
-          </tr>
-        </thead>
-      </table>
+  <main class="container-fluid px-4 py-4">
+    <div class="mb-4">
+      <h1 class="gfn-title">Steam Deals</h1>
+      <p class="gfn-subtitle">Current Steam discounts for GeForce NOW games. Last updated: <span class="gfn-accent"><%= last %></span></p>
     </div>
-  </div>
+
+    <table id="gameslist" class="table table-bordered display responsive" style="width:100%">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Link</th>
+          <th>Original Price</th>
+          <th>Sale Price</th>
+          <th>Discount</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
 
   <script type="text/javascript">
     $(document).ready(function() {
       $('#gameslist').DataTable({
         "ajax": "data/steamoffers-new.json",
-        "responsive":true,
+        "responsive": true,
         "searching": true,
-        "pageLength": 10,
-        "columns": [{
-          "data": "title"
-        },/* {
-          "data": "id"
-        },*/ {
-          "defaultContent": "buy",
-          "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-            $(nTd).html("<a href='https://store.steampowered.com/app/"+oData.id+"'  target='_blank'>"+/*oData.title*/"Buy on Steam"+"</a>");
+        "pageLength": 50,
+        "order": [[4, "desc"]],
+        "columns": [
+          { "data": "title" },
+          {
+            "defaultContent": "",
+            "fnCreatedCell": function(nTd, sData, oData, iRow, iCol) {
+              $(nTd).html('<a href="https://store.steampowered.com/app/' + oData.id + '" target="_blank" rel="noopener"><i class="fab fa-steam mr-1"></i>Buy on Steam</a>');
+            }
+          },
+          {
+            "data": "initial",
+            "render": function(data) {
+              return data ? '€' + (data / 100).toFixed(2) : '-';
+            }
+          },
+          {
+            "data": "final",
+            "render": function(data) {
+              return data ? '€' + (data / 100).toFixed(2) : '-';
+            }
+          },
+          {
+            "data": "discount",
+            "render": function(data) {
+              return data ? '<span class="discount-badge">-' + data + '%</span>' : '-';
+            }
           }
-        },{
-          "data": "initial"
-        }, {
-          "data": "final"
-        }, {
-          "data": "discount"
-        }]
+        ],
+        "language": {
+          "search": '<i class="fas fa-search"></i>',
+          "searchPlaceholder": "Search deals...",
+          "lengthMenu": "Show _MENU_ deals",
+          "info": "Showing _START_ to _END_ of _TOTAL_ deals"
+        }
       });
     });
   </script>
-
-  <script src="vendor/dark-mode-switch.min.js"></script>
 
   <%- include("partials/analytics.ejs") %>
 
